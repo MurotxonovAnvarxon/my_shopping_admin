@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:my_shopping_admin/components/drawer/drawer.dart';
 import 'package:my_shopping_admin/items/item.dart';
+import 'add_prodect_screen/add_product_screen.dart';
 import 'cart_list.dart';
 
 import '../items/shopping_cart.dart';
@@ -91,7 +92,15 @@ class _ShopListState extends State<ShopListWidget> {
         key: _scaffoldKey,
         drawer: const UserCabinet(),
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.white),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddProduct()));
+                },
+                icon: const Icon(Icons.add))
+          ],
+          iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: Colors.blueAccent,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(

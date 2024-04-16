@@ -1,0 +1,164 @@
+{
+  "project_info": {
+    "project_number": "1061200140405",
+    "project_id": "flutterprojefcts",
+    "storage_bucket": "flutterprojefcts.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061200140405:android:4a913150a84890f8fd403c",
+        "android_client_info": {
+          "package_name": "com.example.example"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUMHgzJVcDSGOpygrV19hp-MmU_xfbklQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061200140405:android:6e701b195b649310fd403c",
+        "android_client_info": {
+          "package_name": "com.example.flutterbook"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUMHgzJVcDSGOpygrV19hp-MmU_xfbklQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      },
+      "admob_app_id": "ca-app-pub-4924950656743042~2582073878"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061200140405:android:25247d3bff5501c1fd403c",
+        "android_client_info": {
+          "package_name": "com.example.friendslocation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUMHgzJVcDSGOpygrV19hp-MmU_xfbklQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061200140405:android:1e451f9ae91caa43fd403c",
+        "android_client_info": {
+          "package_name": "com.example.marketplace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUMHgzJVcDSGOpygrV19hp-MmU_xfbklQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061200140405:android:4463c46146da5096fd403c",
+        "android_client_info": {
+          "package_name": "com.example.my_shopping2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUMHgzJVcDSGOpygrV19hp-MmU_xfbklQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061200140405:android:d2925b1af4d4bf37fd403c",
+        "android_client_info": {
+          "package_name": "com.example.my_shopping_admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUMHgzJVcDSGOpygrV19hp-MmU_xfbklQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061200140405:android:220316022f805925fd403c",
+        "android_client_info": {
+          "package_name": "com.example.valuta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUMHgzJVcDSGOpygrV19hp-MmU_xfbklQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      },
+      "admob_app_id": "ca-app-pub-4924950656743042~9072186950"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061200140405:android:1e9fbd146bc51245fd403c",
+        "android_client_info": {
+          "package_name": "uz.sariq.untitled1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUMHgzJVcDSGOpygrV19hp-MmU_xfbklQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

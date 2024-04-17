@@ -42,7 +42,7 @@ class _AddProductState extends State<AddProduct> {
         description: controllerDescription.text.trim(),
         price: double.parse(controllerPrice.text.trim()),
         imageUrl: imageUrl,
-        isAvailable: true, // Default to true or false based on availability logic
+        isAvailable: true,
       );
 
       // Add the product to 'products' collection in Firestore

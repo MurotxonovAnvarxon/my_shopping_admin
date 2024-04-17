@@ -14,6 +14,9 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
   File? _image;
+  TextEditingController controllerName = TextEditingController();
+  TextEditingController controllerDescription = TextEditingController();
+  TextEditingController controllerPrice = TextEditingController();
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -27,7 +30,7 @@ class _AddProductState extends State<AddProduct> {
       }
     });
   }
-
+//koment
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,31 +51,93 @@ class _AddProductState extends State<AddProduct> {
       ),
       body: Column(
         children: [
-          Container(
-            height: 100,
+          SizedBox(
+            height: 200,
             child: Row(
               children: [
                 ElevatedButton(
                   onPressed: _pickImage,
-                  child: const Text('Rasm tanlanmagan'),
+                  child: const Text('Rasm tanlang'),
                 ),
-                Expanded(
-                  child: _image == null
-                      ? const Center(
-                    child: Text(
-                      'No image',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  )
-                      : Image.file(
-                    _image!,
-                    height: 60,
-                    width: 400,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Expanded(
+                    child: _image == null
+                        ? const Center(
+                            child: Text(
+                              'No image',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          )
+                        : AspectRatio(
+                            aspectRatio: 1,
+                            child: Image.file(
+                              _image!,
+                              height: 300,
+                              width: 300,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                   ),
                 ),
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: TextField(
+              onChanged: (text) {
+                controllerName.text = text;
+              },
+              controller: controllerName,
+              decoration: const InputDecoration(
+                labelText: "Product name",
+                hintText: "Product name",
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: TextField(
+              onChanged: (text) {
+                controllerDescription.text = text;
+              },
+              controller: controllerDescription,
+              decoration: const InputDecoration(
+                labelText: "Product description",
+                hintText: "Product description",
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: TextField(
+              onChanged: (text) {
+                controllerPrice.text = text;
+              },
+              controller: controllerPrice,
+              decoration: const InputDecoration(
+                labelText: "Product price",
+                hintText: "Product price",
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          FloatingActionButton(
+            onPressed: () {},
+            child: Text("save"),
+          )
         ],
       ),
     );

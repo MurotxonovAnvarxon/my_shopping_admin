@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+import '../../product_data/product_data.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({Key? key}) : super(key: key);
@@ -18,6 +21,42 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerDescription = TextEditingController();
   TextEditingController controllerPrice = TextEditingController();
+
+
+  String imageUrl = ''; // Set the actual image URL here
+
+  // Function to generate a unique ID (e.g., using Firestore auto-generated ID)
+  String generateUniqueId() {
+    return FirebaseFirestore.instance.collection('products').doc().id;
+  }
+
+  // Function to add product to Firestore
+  Future<void> addProductToFirestore() async {
+    try {
+      String productId = generateUniqueId();
+
+      // Create a Product instance with the entered data
+      Product newProduct = Product(
+        id: productId,
+        name: controllerName.text.trim(),
+        description: controllerDescription.text.trim(),
+        price: double.parse(controllerPrice.text.trim()),
+        imageUrl: imageUrl,
+        isAvailable: true, // Default to true or false based on availability logic
+      );
+
+      // Add the product to 'products' collection in Firestore
+      await FirebaseFirestore.instance
+          .collection('products')
+          .doc(productId)
+          .set(newProduct.toMap());
+
+      // Show success message or navigate to another screen
+      print("Product added successfully!");
+    } catch (e) {
+      print("Error adding product: $e");
+    }
+  }
 
 
   Future<void> uploadImageToFirebase(File image, String firebaseStoragePath) async {
@@ -159,9 +198,8 @@ class _AddProductState extends State<AddProduct> {
           FloatingActionButton(
             onPressed: ()async {
               // File? image = await pickImage();
-
+              addProductToFirestore();
               uploadImageToFirebase(image!, "images/${DateTime.now().millisecondsSinceEpoch}.jpg");
-
             },
             child: Text("save"),
           )

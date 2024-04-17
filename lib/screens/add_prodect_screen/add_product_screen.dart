@@ -26,7 +26,7 @@ class _AddProductState extends State<AddProduct> {
 
   // Function to generate a unique ID (e.g., using Firestore auto-generated ID)
   String generateUniqueId() {
-    return FirebaseFirestore.instance.collection('products').doc().id;
+    return FirebaseFirestore.instance.collection('productsLast').doc().id;
   }
 
   void showSnackbar(BuildContext context, String message) {
@@ -38,53 +38,84 @@ class _AddProductState extends State<AddProduct> {
     );
   }
 
-  // Function to add product to Firestore
-  Future<void> addProductToFirestore() async {
+  Future<void> uploadImageToStorageAndFirestore(
+      String id,
+      String imagePath,
+      String productName,
+      String productDescription,
+      String productPrice,
+      String productCategories) async {
     try {
-      String productId = generateUniqueId();
+      Reference storageRef = FirebaseStorage.instance.ref().child(imagePath);
+      UploadTask uploadTask = storageRef.putFile(image!);
 
-      // Create a Product instance with the entered data
-      Product newProduct = Product(
-          id: productId,
-          name: controllerName.text.trim(),
-          description: controllerDescription.text.trim(),
-          price: double.parse(controllerPrice.text.trim()),
-          imageUrl: imageUrl,
-          isAvailable: true,
-          categories: selectedCategory);
+      TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() => null);
+      String imageUrl = await storageSnapshot.ref.getDownloadURL();
 
-      // Add the product to 'products' collection in Firestore
-      await FirebaseFirestore.instance
-          .collection('products')
-          .doc(productId)
-          .set(newProduct.toMap());
+      await FirebaseFirestore.instance.collection('productLast').add({
+        'id': imagePath,
+        'productName': productName,
+        'productDescription': productDescription,
+        'imageUrl': imageUrl,
+        'productPrice': productPrice,
+        'productCategories': productCategories,
+        'storagePath': imagePath,
+      });
 
-      // Show success message or navigate to another screen
-      print("Product added successfully!");
+      print('Image uploaded to Firebase Storage and Firestore successfully.');
     } catch (e) {
-      print("Error adding product: $e");
+      print('Error uploading image: $e');
     }
   }
 
-  Future<void> uploadImageToFirebase(
-      File image, String firebaseStoragePath) async {
-    try {
-      // Firebase Storage ni olish
-      final storage = FirebaseStorage.instance;
-
-      // Rasmni yuklash uchun StorageReference obyektini olish
-      final ref = storage.ref().child(firebaseStoragePath);
-
-      // Rasmni yuklash
-      await ref.putFile(image);
-
-      // Yuklab olingan rasm URL sini olish
-      String downloadURL = await ref.getDownloadURL();
-      print("Rasm muvaffaqiyatli yuklandi. URL: $downloadURL");
-    } catch (e) {
-      print("Rasmni yuklashda xatolik yuz berdi: $e");
-    }
-  }
+  //
+  // // Function to add product to Firestore
+  // Future<void> addProductToFirestore() async {
+  //   try {
+  //     String productId = generateUniqueId();
+  //
+  //     // Create a Product instance with the entered data
+  //     Product newProduct = Product(
+  //         id: productId,
+  //         name: controllerName.text.trim(),
+  //         description: controllerDescription.text.trim(),
+  //         price: double.parse(controllerPrice.text.trim()),
+  //         imageUrl: imageUrl,
+  //         isAvailable: true,
+  //         categories: selectedCategory);
+  //
+  //     // Add the product to 'products' collection in Firestore
+  //     await FirebaseFirestore.instance
+  //         .collection('products')
+  //         .doc(productId)
+  //         .set(newProduct.toMap());
+  //
+  //     // Show success message or navigate to another screen
+  //     print("Product added successfully!");
+  //   } catch (e) {
+  //     print("Error adding product: $e");
+  //   }
+  // }
+  //
+  // Future<void> uploadImageToFirebase(
+  //     File image, String firebaseStoragePath) async {
+  //   try {
+  //     // Firebase Storage ni olish
+  //     final storage = FirebaseStorage.instance;
+  //
+  //     // Rasmni yuklash uchun StorageReference obyektini olish
+  //     final ref = storage.ref().child(firebaseStoragePath);
+  //
+  //     // Rasmni yuklash
+  //     await ref.putFile(image);
+  //
+  //     // Yuklab olingan rasm URL sini olish
+  //     String downloadURL = await ref.getDownloadURL();
+  //     print("Rasm muvaffaqiyatli yuklandi. URL: $downloadURL");
+  //   } catch (e) {
+  //     print("Rasmni yuklashda xatolik yuz berdi: $e");
+  //   }
+  // }
 
   String selectedCategory = 'None';
 
@@ -127,42 +158,44 @@ class _AddProductState extends State<AddProduct> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.black, width: 1)),
-                height: MediaQuery.of(context).size.width / 2,
-                width: MediaQuery.of(context).size.width / 2,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Expanded(
-                        child: image == null
-                            ? Center(
-                                child: TextButton(
-                                  onPressed: pickImage,
-                                  child: const Text(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: InkWell(
+                onTap: () {
+                  pickImage();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.black, width: 1)),
+                  height: MediaQuery.of(context).size.width / 2,
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Expanded(
+                          child: image == null
+                              ? const Center(
+                                  child: Text(
                                     'Select image',
                                     style: TextStyle(
                                         fontSize: 18, color: Colors.grey),
                                   ),
+                                )
+                              : AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Image.file(
+                                    image!,
+                                    height: 300,
+                                    width: 300,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              )
-                            : AspectRatio(
-                                aspectRatio: 1,
-                                child: Image.file(
-                                  image!,
-                                  height: 300,
-                                  width: 300,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -260,11 +293,26 @@ class _AddProductState extends State<AddProduct> {
               child: InkWell(
                 onTap: () async {
                   // File? image = await pickImage();
-                  if (selectedCategory != 'None') {
-                    addProductToFirestore();
-                    Navigator.pop(context);
-                  } else {
+                  if (selectedCategory == 'None') {
                     showSnackbar(context, 'Please select a category');
+                  } else if (controllerName.text.length < 4) {
+                    showSnackbar(
+                        context, 'The name must be longer than 4 characters');
+                  } else if (controllerDescription.text.length < 4) {
+                    showSnackbar(context,
+                        'The description must be longer than 4 characters');
+                  } else if (controllerPrice.text.isEmpty) {
+                    showSnackbar(context, 'Please enter a valid price');
+                  } else {
+                    var idAndPath=generateUniqueId();
+                    uploadImageToStorageAndFirestore(
+                        idAndPath,
+                        idAndPath,
+                        controllerName.text,
+                        controllerDescription.text,
+                        controllerPrice.text,
+                        selectedCategory);
+                    Navigator.pop(context);
                   }
                   // uploadImageToFirebase(image!,
                   //     "images/${DateTime.now().millisecondsSinceEpoch}.jpg");

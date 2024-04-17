@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -46,6 +48,8 @@ class _ShopListState extends State<ShopListWidget> {
     final width = MediaQuery.of(context).size.width / columnCount;
     const height = 400;
 
+
+
     List<Widget> items = [];
     for (var x = 0; x < this.items.length; x++) {
       bool isSideLine;
@@ -62,7 +66,6 @@ class _ShopListState extends State<ShopListWidget> {
         isSideLine: isSideLine,
         onTap: (item) {
           // _scaffoldKey.currentState?.hideCurrentSnackBar;
-
           if (cart.isExists(item)) {
             cart.remove(item);
             const SnackBar(content: Text('Item is removed from cart!'));
@@ -235,5 +238,16 @@ class _ShopListItemState extends State<_ShopListItem> {
                         : widget.item.availabilityColor)),
           ],
         )));
+  }
+}
+
+Future<String?> downloadImage(String imagePath) async {
+  try {
+    Reference ref = FirebaseStorage.instance.ref().child(imagePath);
+    String downloadUrl = await ref.getDownloadURL();
+    return downloadUrl;
+  } catch (e) {
+    print('Error downloading image: $e');
+    return null;
   }
 }

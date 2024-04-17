@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Product {
-  final String id; // Unique document ID in Firestore
+  final String id;
   final String name;
   final String description;
   final double price;
   final String imageUrl;
-  final bool isAvailable; // Indicates product availability
+  final bool isAvailable;
+  final String categories;
 
   Product({
     required this.id,
@@ -15,6 +16,7 @@ class Product {
     required this.price,
     required this.imageUrl,
     required this.isAvailable,
+    required this.categories
   });
 
   // Convert Product object to a map (for Firestore)
@@ -27,6 +29,7 @@ class Product {
       'imageUrl': imageUrl,
       'isAvailable': isAvailable,
       'createdAt': Timestamp.now(),
+      'categories': categories
     };
   }
 }

@@ -4,10 +4,10 @@ class Product {
   final String id;
   final String name;
   final String description;
-  final double price;
+  final String price;
   final String imageUrl;
   final bool isAvailable;
-  final String categories;
+  final String categoriesName;
 
   Product({
     required this.id,
@@ -16,20 +16,19 @@ class Product {
     required this.price,
     required this.imageUrl,
     required this.isAvailable,
-    required this.categories
+    required this.categoriesName,
   });
 
-  // Convert Product object to a map (for Firestore)
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'description': description,
-      'price': price,
-      'imageUrl': imageUrl,
-      'isAvailable': isAvailable,
-      'createdAt': Timestamp.now(),
-      'categories': categories
-    };
+  factory Product.fromFirestore(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return Product(
+      id: doc.id,
+      name: data['name'] ?? '',
+      description: data['description'] ?? '',
+      price: data['price'] ?? '',
+      imageUrl: data['imageUrl'] ?? '',
+      isAvailable: data['isAvailable'] ?? false,
+      categoriesName: data['categoriesName'] ?? '',
+    );
   }
 }

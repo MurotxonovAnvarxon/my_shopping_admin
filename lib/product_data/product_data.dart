@@ -31,4 +31,15 @@ class Product {
       categoriesName: data['categoriesName'] ?? '',
     );
   }
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'price': price,
+      'imageUrl': imageUrl,
+      'isAvailable': isAvailable,
+      'categoriesName': categoriesName,
+    };
+  }
 }

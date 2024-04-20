@@ -1,10 +1,15 @@
-import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:my_shopping_admin/components/drawer/drawer.dart';
+import 'package:my_shopping_admin/items/item_grid.dart';
 import 'package:my_shopping_admin/product_data/product_data.dart';
+import 'package:my_shopping_admin/screens/detail_page.dart';
+import 'package:my_shopping_admin/screens/home_screen.dart';
+import 'package:my_shopping_admin/screens/items_page.dart';
+import 'package:my_shopping_admin/utils/colors.dart';
+
 import '../items/shopping_cart.dart';
 import '../service.dart';
 import 'add_prodect_screen/add_product_screen.dart';
@@ -21,6 +26,7 @@ class _ShopListState extends State<ShopListWidget> {
   ShoppingCart cart = ShoppingCart();
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  late final void Function(Product model) onItemTap;
 
   // final List<Item> items = Item.dummyItems;
   List<String> pictureUrls = [];
@@ -46,6 +52,7 @@ class _ShopListState extends State<ShopListWidget> {
   @override
   void initState() {
     super.initState();
+    ProductService.getAllProductList();
     fetchImageUrlsFromStorage(
         "images/"); // Change "images/" to your storage path
   }
@@ -69,8 +76,6 @@ class _ShopListState extends State<ShopListWidget> {
       print('Error retrieving image URLs from Firebase Storage: $e');
     }
   }
-
-  List<Product> productList = [];
 
   Future<void> displayImageFromFirestore(
     String id,
@@ -157,22 +162,27 @@ class _ShopListState extends State<ShopListWidget> {
               crossAxisCount: 2),
           itemCount: pictureUrls.length,
           itemBuilder: (context, index) {
-            return Column(
+            return Stack(
               children: [
-                Wrap(children: [
-                  // Image.network(
-                  //   pictureUrls[index % pictureUrls.length],
-                  //   fit: BoxFit.cover, // Adjust image fit as needed
-                  //   width: MediaQuery.of(context).size.width / 2.2,
-                  //   height: MediaQuery.of(context).size.width / 2.2,
-                  // ),
-                ]),
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Container(
+                    child: Image.network(
+                      pictureUrls[index % pictureUrls.length],
+                      fit: BoxFit.cover, // Adjust image fit as needed
+                      width: MediaQuery.of(context).size.width / 2.2,
+                      height: MediaQuery.of(context).size.width / 2.2,
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
-                  child: ElevatedButton(onPressed: () {
-                    getProduct(pictureUrls[index]);
-                  }, child: Text('click')),
-                )
+                  child: ElevatedButton(
+                      onPressed: () {
+                        getProduct(pictureUrls[index]);
+                      },
+                      child: Text(ProductService.productList[index].name)),
+                ),
               ],
             );
           },

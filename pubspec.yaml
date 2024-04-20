@@ -42,6 +42,9 @@ dependencies:
   wakelock: ^0.6.2
   cloud_firestore: ^4.17.0
   dio: ^5.4.3+1
+  iconsax: ^0.0.8
+  google_fonts: ^6.2.1
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +54,7 @@ dev_dependencies:
   firebase_core: ^2.29.0
   cached_network_image: ^3.3.1
   firebase_storage: ^11.6.6
+
 
 
 

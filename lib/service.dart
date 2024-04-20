@@ -26,6 +26,30 @@ class ProductService {
       print('Failed to add product: $e');
     }
   }
+   static List<Product> productList = [];
+
+  static Future<List<Product>> getAllProductList() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('productsumg').get();
+      querySnapshot.docs.forEach((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        Product product = Product(
+          id: doc.id,
+          name: data['name'] ?? '',
+          description: data['description'] ?? '',
+          price: data['price'] ?? '',
+          imageUrl: data['imageUrl'] ?? '',
+          isAvailable: data['isAvailable'] ?? false,
+          categoriesName: data['categoriesName'] ?? '',
+        );
+        productList.add(product);
+      });
+    } catch (e) {
+      print('Error getting products: $e');
+    }
+    return productList;
+  }
+
   static Future<Product?> getProductById(String id) async {
     try {
       DocumentSnapshot productSnapshot =

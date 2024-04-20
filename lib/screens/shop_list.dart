@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:drag_select_grid_view/drag_select_grid_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -8,6 +9,7 @@ import 'package:my_shopping_admin/product_data/product_data.dart';
 import 'package:my_shopping_admin/screens/detail_page.dart';
 import 'package:my_shopping_admin/screens/home_screen.dart';
 import 'package:my_shopping_admin/screens/items_page.dart';
+import 'package:my_shopping_admin/screens/test.dart';
 import 'package:my_shopping_admin/utils/colors.dart';
 
 import '../items/shopping_cart.dart';
@@ -28,7 +30,6 @@ class _ShopListState extends State<ShopListWidget> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   late final void Function(Product model) onItemTap;
 
-  // final List<Item> items = Item.dummyItems;
   List<String> pictureUrls = [];
 
   void getProduct(String id) async {
@@ -49,13 +50,23 @@ class _ShopListState extends State<ShopListWidget> {
     }
   }
 
+  final controller = DragSelectGridViewController();
+
   @override
   void initState() {
     super.initState();
     ProductService.getAllProductList();
-    fetchImageUrlsFromStorage(
-        "images/"); // Change "images/" to your storage path
+    controller.addListener(scheduleRebuild);
+    fetchImageUrlsFromStorage("images/");
   }
+
+  @override
+  void dispose() {
+    controller.removeListener(scheduleRebuild);
+    super.dispose();
+  }
+
+  void scheduleRebuild() => setState(() {});
 
   Future<void> fetchImageUrlsFromStorage(String storagePath) async {
     try {
@@ -94,8 +105,6 @@ class _ShopListState extends State<ShopListWidget> {
         final Map<String, dynamic> responseData = response.data;
 
         final String imageUrl = responseData['imageUrl'] ?? '';
-
-        // Display image and product details on screen (for demonstration purposes)
         print('--------------------------------------------------');
         print('Product Name: $productName');
         print('Product Description: $productDescription');
@@ -104,19 +113,13 @@ class _ShopListState extends State<ShopListWidget> {
         print('Image URL: $imageUrl');
         print('--------------------------------------------------');
 
-        // You can use the retrieved data to display it on the screen using widgets
-        // For example, use Image.network to display the image:
-        // Image.network(imageUrl)
-
         print('Image and product details displayed successfully.');
       } else {
         print(
             'Failed to load data. Response status code: ${response.statusCode}');
-        // Handle unsuccessful response, display error message, or notify user accordingly
       }
     } catch (e) {
       print('Error retrieving data: $e');
-      // Handle error, display error message, or notify user accordingly
     }
   }
 
@@ -128,9 +131,30 @@ class _ShopListState extends State<ShopListWidget> {
     const height = 400;
 
     return Scaffold(
-      key: _scaffoldKey,
-      drawer: const UserCabinet(),
-      appBar: AppBar(
+        key: _scaffoldKey,
+        drawer: const UserCabinet(),
+        appBar: SelectionAppBar(
+          selection: controller.value,
+          title: Center(
+            child: Text(
+              "Decoration Shop",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          list: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddProduct()));
+              },
+              icon: const Icon(
+                Icons.add,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        )
+        /*AppBar(
         actions: [
           IconButton(
             onPressed: () {
@@ -154,41 +178,64 @@ class _ShopListState extends State<ShopListWidget> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2),
-          itemCount: pictureUrls.length,
-          itemBuilder: (context, index) {
-            return Stack(
+      )*/
+        ,
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: DragSelectGridView(
+            // gridController: controller,
+            padding: const EdgeInsets.all(8),
+            itemCount: pictureUrls.length,
+            itemBuilder: (context, index, selected) {
+              return SelectableItem(
+                index: index,
+                color: Colors.grey,
+                selected: selected,
+                text: ProductService.productList[index].name,
+                pictureUrls: pictureUrls[index % pictureUrls.length],
+                price: '${ProductService.productList[index].price} so`m',
+                description: ProductService.productList[index].description,
+                categoriesName: ProductService.productList[index].categoriesName,
+              );
+            },
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                mainAxisExtent: MediaQuery.of(context).size.width * 0.7),
+          ),
+          /*GridView.count(
+          crossAxisCount: 2,
+          children: List.generate(pictureUrls.length, (index) {
+            return Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: Container(
-                    child: Image.network(
-                      pictureUrls[index % pictureUrls.length],
-                      fit: BoxFit.cover, // Adjust image fit as needed
-                      width: MediaQuery.of(context).size.width / 2.2,
-                      height: MediaQuery.of(context).size.width / 2.2,
-                    ),
+                Container(
+                  child: Image.network(
+                    pictureUrls[index % pictureUrls.length],
+                    fit: BoxFit.cover,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        getProduct(pictureUrls[index]);
-                      },
-                      child: Text(ProductService.productList[index].name)),
-                ),
+                ElevatedButton(
+                    onPressed: () {
+                      getProduct(pictureUrls[index]);
+                    },
+                    child: Text(ProductService.productList[index].name)),
               ],
             );
-          },
+          }),
+        )*/
         ),
-      ),
-      floatingActionButton: cart.isEmpty
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black54,
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => AddProduct()));
+          },
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+        ) /*cart.isEmpty
           ? null
           : FloatingActionButton.extended(
               onPressed: () {
@@ -200,8 +247,8 @@ class _ShopListState extends State<ShopListWidget> {
               },
               icon: Icon(Icons.shopping_cart),
               label: Text("${cart.numOfItems}"),
-            ),
-    );
+            ),*/
+        );
   }
 }
 

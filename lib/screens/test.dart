@@ -111,7 +111,7 @@ class SelectionAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class SelectableItem extends StatefulWidget {
-  const SelectableItem(
+  const   SelectableItem(
       {Key? key,
       required this.index,
       required this.color,
@@ -184,7 +184,8 @@ class _SelectableItemState extends State<SelectableItem>
       builder: (context, child) {
         return Container(
           decoration: BoxDecoration(
-              color: Colors.lightBlueAccent, borderRadius: BorderRadius.circular(4)),
+              color: Colors.lightBlueAccent,
+              borderRadius: BorderRadius.circular(4)),
           child: Transform.scale(
             scale: _scaleAnimation.value,
             child: DecoratedBox(

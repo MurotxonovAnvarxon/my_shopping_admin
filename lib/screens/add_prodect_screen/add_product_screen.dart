@@ -182,25 +182,23 @@ class _AddProductState extends State<AddProduct> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Expanded(
-                          child: image == null
-                              ? const Center(
-                                  child: Text(
-                                    'Select image',
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.grey),
-                                  ),
-                                )
-                              : AspectRatio(
-                                  aspectRatio: 1,
-                                  child: Image.file(
-                                    image!,
-                                    height: 300,
-                                    width: 300,
-                                    fit: BoxFit.cover,
-                                  ),
+                        child: image == null
+                            ? const Center(
+                                child: Text(
+                                  'Select image',
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.grey),
                                 ),
-                        ),
+                              )
+                            : AspectRatio(
+                                aspectRatio: 1,
+                                child: Image.file(
+                                  image!,
+                                  height: 300,
+                                  width: 300,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                       ),
                     ],
                   ),

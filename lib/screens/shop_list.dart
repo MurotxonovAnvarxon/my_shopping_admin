@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:my_shopping_admin/components/drawer/drawer.dart';
 import 'package:my_shopping_admin/items/item_grid.dart';
+import 'package:my_shopping_admin/orderScreen.dart';
 import 'package:my_shopping_admin/product_data/product_data.dart';
 import 'package:my_shopping_admin/screens/detail_page.dart';
 import 'package:my_shopping_admin/screens/home_screen.dart';
@@ -225,16 +226,32 @@ class _ShopListState extends State<ShopListWidget> {
           }),
         )*/
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.black54,
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => AddProduct()));
-          },
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FloatingActionButton(
+              backgroundColor: Colors.black54,
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => OrderScreen()));
+              },
+              child: Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+              ),
+            ),
+            FloatingActionButton(
+              backgroundColor: Colors.black54,
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => AddProduct()));
+              },
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ) /*cart.isEmpty
           ? null
           : FloatingActionButton.extended(

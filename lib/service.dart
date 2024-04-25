@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_shopping_admin/product_data/product_data.dart';
+import 'package:my_shopping_admin/screens/add_prodect_screen/selling_product_data.dart';
 
 class ProductService {
   static Future<void> addProductToFirestore({
@@ -26,11 +27,39 @@ class ProductService {
       print('Failed to add product: $e');
     }
   }
-   static List<Product> productList = [];
+
+  static List<Product> productList = [];
+  static List<SellingProduct> sellProductList = [];
+
+  static Future<List<SellingProduct>> getAllSellProductList() async {
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('sellProductsUmg').get();
+      querySnapshot.docs.forEach((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        SellingProduct product = SellingProduct(
+          id: doc.id,
+          name: data['name'] ?? '',
+          description: data['description'] ?? '',
+          price: data['price'] ?? '',
+          isAvailable: data['isAvailable'] ?? false,
+          categoriesName: data['categoriesName'] ?? '',
+          // imageUrl: '',
+          date: '',
+        );
+        sellProductList.add(product);
+
+      });
+    } catch (e) {
+      print('Error getting products: $e');
+    }
+    return sellProductList;
+  }
 
   static Future<List<Product>> getAllProductList() async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('productsumg').get();
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('productsumg').get();
       querySnapshot.docs.forEach((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         Product product = Product(
@@ -52,11 +81,14 @@ class ProductService {
 
   static Future<Product?> getProductById(String id) async {
     try {
-      DocumentSnapshot productSnapshot =
-      await FirebaseFirestore.instance.collection('productsumg').doc(id).get();
+      DocumentSnapshot productSnapshot = await FirebaseFirestore.instance
+          .collection('productsumg')
+          .doc(id)
+          .get();
 
       if (productSnapshot.exists) {
-        Map<String, dynamic> data = productSnapshot.data() as Map<String, dynamic>;
+        Map<String, dynamic> data =
+            productSnapshot.data() as Map<String, dynamic>;
         return Product(
           id: id,
           name: data['name'] ?? '',

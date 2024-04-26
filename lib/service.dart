@@ -107,4 +107,19 @@ class ProductService {
       return null;
     }
   }
+
+  static Future<void> getAllSellProductsFromFirestore() async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+          .collection('sellProducts')
+          .get();
+
+      final List<Map<String, dynamic>> sellProducts = snapshot.docs.map((doc) => doc.data()).toList();
+
+      print('All sell products: $sellProducts');
+    } catch (e) {
+      print('Failed to get all sell products: $e');
+    }
+  }
+
 }

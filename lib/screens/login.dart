@@ -14,6 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+
   Future<bool> logIn(String username, String password) async {
     QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
         .instance
@@ -21,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
         .where('login', isEqualTo: username)
         .where('password', isEqualTo: password)
         .get();
-
     if (snapshot.docs.isNotEmpty) {
       return true;
     } else {

@@ -11,7 +11,7 @@ class SellingProduct {
     required this.phone,
   });
 
-  factory SellingProduct.fromJson(Map<String, dynamic> json) {
+  factory SellingProduct.fromJson(Map<String, dynamic> json,) {
     List<dynamic> productListData = json['products'];
     List<Product> productList = productListData
         .map((productData) => Product.fromFirestore(productData))

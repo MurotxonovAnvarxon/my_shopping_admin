@@ -29,7 +29,34 @@ class ProductService {
   }
 
   static List<Product> productList = [];
-  static List<SellingProduct> sellProductList = [];
+  static List<SellingProduct> sellingProducts = [];
+
+  static Future<void> fetchSellProductFromFirestore(String documentId) async {
+    try {
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('sellProducts')
+          .doc(documentId)
+          .get();
+      final docSnapshotDocumentId =
+          await FirebaseFirestore.instance.collection('sellProducts').get();
+
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
+        // var id = docSnapshotDocumentId.docs.forEach((element) {
+        //   ids.add(element.id);
+        // });
+        // Do something with the retrieved data
+        var list=data;
+        print('Retrieved data: $data');
+        // print('-------------------------------id: ${ids.toString()}');
+
+      } else {
+        print('Document does not exist!');
+      }
+    } catch (e) {
+      print('Failed to fetch product: $e');
+    }
+  }
 
   static Future<List<Product>> getAllProductList() async {
     try {
@@ -54,67 +81,55 @@ class ProductService {
     return productList;
   }
 
-  static Future<List<SellingProduct>> getAllSellingProductsFromFirestore() async {
+  static CollectionReference sellProducts =
+      FirebaseFirestore.instance.collection('sellProducts');
+
+  // static Stream<List<SellingProduct>> getAllSellings() {
+  //   sellProducts.add(sellProducts.snapshots().map((snapshot) => snapshot.docs
+  //       .map((e) => SellingProduct.fromJson(
+  //             e.data() as Map<String, dynamic>,
+  //           ))
+  //       .toList()));
+  //   return sellProducts.snapshots().map((snapshot) => snapshot.docs
+  //       .map((e) => SellingProduct.fromJson(
+  //             e.data() as Map<String, dynamic>,
+  //           ))
+  //       .toList());
+  // }
+
+  static Future<List<SellingProduct>> getAllSellingProduct() async {
     try {
-      final QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('sellProducts').get();
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('sellProducts').get();
 
-      List<SellingProduct> sellingProducts = [];
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-      for (QueryDocumentSnapshot doc in snapshot.docs) {
-        final data = doc.data() as Map<String, dynamic>;
+        String id = data['phone'];
+        String date = data['date'];
 
-        List<Product> products = (data['list'] as List<dynamic>).map((productData) {
-          return Product.fromFirestore(productData);
-        }).toList();
+        List<Product> productList = [];
+        List<dynamic> productsData = data['list'];
+        for (Map<String, dynamic> productData in productsData) {
+          Product product =
+              Product.fromFirestore(productData as DocumentSnapshot<Object?>);
+          productList.add(product);
+        }
 
         SellingProduct sellingProduct = SellingProduct(
-          phone: data['id'],
-          date: data['date'],
-          products: products,
+          phone: id,
+          date: date,
+          products: productList,
         );
 
         sellingProducts.add(sellingProduct);
       }
-
-      print('All selling products: $sellingProducts');
-      return sellingProducts;
+      print("selling!!!!!!!!${sellingProducts}");
+      print('Selling products retrieved successfully!');
     } catch (e) {
-      print('Failed to get all selling products: $e');
-      return []; // Empty list if there's an error
+      print('Failed to retrieve selling products: $e');
     }
+
+    return sellingProducts;
   }
-
-
-
-
-  static Future<Product?> getProductById(String id) async {
-    try {
-      DocumentSnapshot productSnapshot = await FirebaseFirestore.instance
-          .collection('productsumg')
-          .doc(id)
-          .get();
-
-      if (productSnapshot.exists) {
-        Map<String, dynamic> data =
-            productSnapshot.data() as Map<String, dynamic>;
-        return Product(
-          id: id,
-          name: data['name'] ?? '',
-          description: data['description'] ?? '',
-          price: data['price'] ?? '',
-          imageUrl: data['imageUrl'] ?? '',
-          isAvailable: data['isAvailable'] ?? false,
-          categoriesName: data['categoriesName'] ?? '',
-        );
-      } else {
-        print('Product with ID $id does not exist.');
-        return null;
-      }
-    } catch (e) {
-      print('Error fetching product: $e');
-      return null;
-    }
-  }
-
-
 }

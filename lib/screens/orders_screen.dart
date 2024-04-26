@@ -1,7 +1,5 @@
-import 'package:drag_select_grid_view/drag_select_grid_view.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:my_shopping_admin/screens/test.dart';
 import 'package:my_shopping_admin/service.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -12,61 +10,50 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  var sellList=ProductService.sellProductList;
+  var sellList = [];
+  static List<String> ids = [];
+
+  Future<void> _init() async {
+    final docSnapshot = await FirebaseFirestore.instance.collection('sellProducts').get();
+    setState(() {
+      ids = docSnapshot.docs.map((doc) => doc.id).toList();
+      removeDuplicates(); // Dublikatlarni o'chiramiz
+    });
+  }
+
+  void removeDuplicates() {
+    setState(() {
+      ids = ids.toSet().toList();
+    });
+  }
 
   @override
   void initState() {
-    ProductService.getAllSellingProductsFromFirestore();
+    _init();
+
+    // for (int i = 0; i < ids.length; i++) {
+    //   sellList.add(ProductService.fetchSellProductFromFirestore(i.toString()));
+    // }
     super.initState();
   }
+
+  // @override
+  // void initState() {
+  //   sellList=  ProductService.sellingProducts;
+  //   ProductService.getAllSellingProduct();
+  //   print("#################sellproducts:${ProductService.sellingProducts}");
+  //   super.initState();
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: DragSelectGridView(
-          // gridController: controller,
-          padding: const EdgeInsets.all(8),
-          itemCount: sellList.length,
-          itemBuilder: (context, index, selected) {
-            return SelectableItem(
-              index: index,
-              color: Colors.grey,
-              selected: selected,
-              text: sellList[index].date,
-              pictureUrls: /*pictureUrls[index % pictureUrls.length]*/'',
-              price: '${ProductService.productList[index].price} so`m',
-              description: sellList[index].phone,
-              categoriesName: sellList[index].phone,
-            );
-          },
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              mainAxisExtent: MediaQuery.of(context).size.width * 0.7),
-        ),
-        /*GridView.count(
-          crossAxisCount: 2,
-          children: List.generate(pictureUrls.length, (index) {
-            return Column(
-              children: [
-                Container(
-                  child: Image.network(
-                    pictureUrls[index % pictureUrls.length],
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      getProduct(pictureUrls[index]);
-                    },
-                    child: Text(ProductService.productList[index].name)),
-              ],
-            );
-          }),
-        )*/
+      body: Scaffold(
+        body: ListView.builder(
+            itemCount: ids.length,
+            itemBuilder: (context, index) {
+              return Text("${ids[index]}");
+            }),
       ),
     );
   }

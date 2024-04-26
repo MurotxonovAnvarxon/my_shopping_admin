@@ -33,23 +33,23 @@ class _ShopListState extends State<ShopListWidget> {
 
   List<String> pictureUrls = [];
 
-  void getProduct(String id) async {
-    String productId = id;
-    Product? product = await ProductService.getProductById(productId);
-    if (product != null) {
-      print('-------------------------------------------------');
-      print('Retrieved Product:');
-      print('Name: ${product.name}');
-      print('Description: ${product.description}');
-      print('Price: ${product.price}');
-      print('Image URL: ${product.imageUrl}');
-      print('Available: ${product.isAvailable}');
-      print('Category: ${product.categoriesName}');
-      print('-------------------------------------------------');
-    } else {
-      print('Product not found!');
-    }
-  }
+  // void getProduct(String id) async {
+  //   String productId = id;
+  //   Product? product = await ProductService.getProductById(productId);
+  //   if (product != null) {
+  //     print('-------------------------------------------------');
+  //     print('Retrieved Product:');
+  //     print('Name: ${product.name}');
+  //     print('Description: ${product.description}');
+  //     print('Price: ${product.price}');
+  //     print('Image URL: ${product.imageUrl}');
+  //     print('Available: ${product.isAvailable}');
+  //     print('Category: ${product.categoriesName}');
+  //     print('-------------------------------------------------');
+  //   } else {
+  //     print('Product not found!');
+  //   }
+  // }
 
   final controller = DragSelectGridViewController();
 

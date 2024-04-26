@@ -24,22 +24,22 @@ class _OrderScreenState extends State<OrderScreen> {
 
       ),
       body: ListView.builder(
-        itemCount: ProductService.sellProductList.length,
+        itemCount: ProductService.sellingProducts.length,
         itemBuilder: (context, index) {
          return SelectableItem(
            index: index,
            color: Colors.grey,
            selected: false,
-           text: ProductService.sellProductList[index].date,
-           pictureUrls: ProductService.sellProductList[index].date,
-           price: '${ProductService.sellProductList[index].phone} ',
-           description: ProductService.sellProductList[index].phone,
-           categoriesName: ProductService.sellProductList[index].phone,
+           text: ProductService.sellingProducts[index].date,
+           pictureUrls: ProductService.sellingProducts[index].date,
+           price: '${ProductService.sellingProducts[index].phone} ',
+           description: ProductService.sellingProducts[index].phone,
+           categoriesName: ProductService.sellingProducts[index].phone,
          );
         },
       ),
       floatingActionButton: FloatingActionButton(onPressed: () {
-        print('-------------------------------------${ProductService.sellProductList.length}');
+        print('-------------------------------------${ProductService.sellingProducts.length}');
       },),
     );
   }

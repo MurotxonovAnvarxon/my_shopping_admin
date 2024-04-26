@@ -143,7 +143,7 @@ class _AddProductState extends State<AddProduct> {
 //koment
   @override
   Widget build(BuildContext context) {
-    final List<String> categories = ['None', 'All', 'Category A', 'Category B'];
+    final List<String> categories = ['None', 'Barchasi', 'Stullar', 'Stollar','Dekoratsiya'];
     String dropdownValue = categories.first;
     return Scaffold(
       appBar: AppBar(
@@ -185,7 +185,7 @@ class _AddProductState extends State<AddProduct> {
                         child: image == null
                             ? const Center(
                                 child: Text(
-                                  'Select image',
+                                  'Rasm tanlang',
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.grey),
                                 ),
@@ -213,8 +213,8 @@ class _AddProductState extends State<AddProduct> {
                 },
                 controller: controllerName,
                 decoration: const InputDecoration(
-                  labelText: "Product name",
-                  hintText: "Product name",
+                  labelText: "Dekoratsiya nomi",
+                  hintText: "Dekoratsiya nomi",
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -230,8 +230,8 @@ class _AddProductState extends State<AddProduct> {
                 },
                 controller: controllerDescription,
                 decoration: const InputDecoration(
-                  labelText: "Product description",
-                  hintText: "Product description",
+                  labelText: "Dekoratsiya matni",
+                  hintText: "Dekoratsiya matni",
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -247,8 +247,8 @@ class _AddProductState extends State<AddProduct> {
                 },
                 controller: controllerPrice,
                 decoration: const InputDecoration(
-                  labelText: "Product price",
-                  hintText: "Product price",
+                  labelText: "Dekoratsiya narxi",
+                  hintText: "Dekoratsiya narxi",
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -300,15 +300,15 @@ class _AddProductState extends State<AddProduct> {
                 onTap: () async {
                   // File? image = await pickImage();
                   if (selectedCategory == 'None') {
-                    showSnackbar(context, 'Please select a category');
+                    showSnackbar(context, 'Iltimos kategoriya tanlang!');
                   } else if (controllerName.text.length < 4) {
                     showSnackbar(
-                        context, 'The name must be longer than 4 characters');
+                        context, "Nom uzunligi 4 dan katta bo'lsin");
                   } else if (controllerDescription.text.length < 4) {
                     showSnackbar(context,
-                        'The description must be longer than 4 characters');
+                        "Deskription uzunligi 4 dan katta bo'lsin");
                   } else if (controllerPrice.text.isEmpty) {
-                    showSnackbar(context, 'Please enter a valid price');
+                    showSnackbar(context, "Iltimos narxni kiriting");
                   } else {
                     var idAndPath = generateUniqueId();
                     uploadImage(idAndPath);
@@ -340,7 +340,7 @@ class _AddProductState extends State<AddProduct> {
                     padding: EdgeInsets.all(12.0),
                     child: Center(
                       child: Text(
-                        'Save',
+                        'Saqlash',
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.white,

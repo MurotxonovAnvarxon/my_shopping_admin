@@ -136,9 +136,9 @@ class _ShopListState extends State<ShopListWidget> {
         drawer: const UserCabinet(),
         appBar: SelectionAppBar(
           selection: controller.value,
-          title: Center(
+          title: const Center(
             child: Text(
-              "Decoration Shop",
+              "Dekoratsiyalar",
               style: TextStyle(color: Colors.white),
             ),
           ),

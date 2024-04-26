@@ -30,34 +30,35 @@ class ProductService {
 
   static List<Product> productList = [];
   static List<SellingProduct> sellingProducts = [];
-
-  static Future<void> fetchSellProductFromFirestore(String documentId) async {
+static List<SellingProduct> dataSelling=[];
+static List<Product> prd=[];
+  static Future<List<Product>> fetchSellProductsFromFirestore(String documentId) async {
     try {
       final docSnapshot = await FirebaseFirestore.instance
           .collection('sellProducts')
           .doc(documentId)
           .get();
-      final docSnapshotDocumentId =
-          await FirebaseFirestore.instance.collection('sellProducts').get();
 
       if (docSnapshot.exists) {
-        final data = docSnapshot.data() as Map<String, dynamic>;
-        // var id = docSnapshotDocumentId.docs.forEach((element) {
-        //   ids.add(element.id);
-        // });
-        // Do something with the retrieved data
-        var list=data;
-        print('Retrieved data: $data');
-        // print('-------------------------------id: ${ids.toString()}');
-
+        final data = docSnapshot.data();
+        if (data != null && data['list'] != null) {
+          List<Product> products = [];
+          for (var productData in data['list']) {
+            products.add(Product.fromMap(productData));
+          }
+          print("XXXXXXXXXXXXXXXXXXX:-------->${products[0].name}");
+          prd=products;
+          return products;
+        } else {
+          throw 'Invalid data format!';
+        }
       } else {
-        print('Document does not exist!');
+        throw 'Document does not exist!';
       }
     } catch (e) {
-      print('Failed to fetch product: $e');
+      throw 'Failed to fetch products: $e';
     }
   }
-
   static Future<List<Product>> getAllProductList() async {
     try {
       QuerySnapshot querySnapshot =

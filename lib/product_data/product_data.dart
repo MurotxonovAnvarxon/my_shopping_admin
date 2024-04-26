@@ -42,4 +42,15 @@ class Product {
       'categoriesName': categoriesName,
     };
   }
+  factory Product.fromMap(Map<String, dynamic> map) {
+    return Product(
+      id: map['id'],
+      name: map['name'],
+      description: map['description'],
+      imageUrl: map['imageUrl'],
+      categoriesName: map['categoriesName'],
+      price: map['price'],
+      isAvailable: map['isAvailable'],
+    );
+  }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_shopping_admin/screens/test.dart';
 import 'package:my_shopping_admin/service.dart';
+import 'package:intl/intl.dart';
 
 class SellingDetail extends StatefulWidget {
   String id;
@@ -18,11 +19,13 @@ class _SellingDetailState extends State<SellingDetail> {
   var data;
   List<String> pictureUrls = [];
 
+
   @override
   void initState() {
     data = ProductService.fetchSellProductsFromFirestore(widget.id);
     print("--------------data:${data.toString()}");
     fetchImageUrlsFromStorage("images/");
+
 
     super.initState();
   }
@@ -50,7 +53,9 @@ class _SellingDetailState extends State<SellingDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Sana:${ProductService.date.substring(0, 10)}"),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: DragSelectGridView(

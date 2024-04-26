@@ -30,9 +30,12 @@ class ProductService {
 
   static List<Product> productList = [];
   static List<SellingProduct> sellingProducts = [];
-static List<SellingProduct> dataSelling=[];
-static List<Product> prd=[];
-  static Future<List<Product>> fetchSellProductsFromFirestore(String documentId) async {
+  static List<SellingProduct> dataSelling = [];
+  static List<Product> prd = [];
+  static var date = "";
+
+  static Future<List<Product>> fetchSellProductsFromFirestore(
+      String documentId) async {
     try {
       final docSnapshot = await FirebaseFirestore.instance
           .collection('sellProducts')
@@ -47,7 +50,8 @@ static List<Product> prd=[];
             products.add(Product.fromMap(productData));
           }
           print("XXXXXXXXXXXXXXXXXXX:-------->${products[0].name}");
-          prd=products;
+          prd = products;
+          date = data['date'];
           return products;
         } else {
           throw 'Invalid data format!';
@@ -59,6 +63,7 @@ static List<Product> prd=[];
       throw 'Failed to fetch products: $e';
     }
   }
+
   static Future<List<Product>> getAllProductList() async {
     try {
       QuerySnapshot querySnapshot =

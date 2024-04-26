@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_shopping_admin/components/back_button/back_button.dart';
 import 'package:my_shopping_admin/components/cabinet/cabinet_item.dart';
 import 'package:my_shopping_admin/components/exit_tile/exit.dart';
 import 'package:my_shopping_admin/components/padding/overunderpadding.dart';
 
+import '../back_button/back_button.dart';
 import '../profil/profil.dart';
 
 class UserCabinet extends StatefulWidget {
@@ -40,39 +40,39 @@ class _UserCabinetState extends State<UserCabinet> {
               topPadding: 12.5,
               bottomPadding: 18,
             ),
-            CabinetActionTile(
-              onPressed: () {
-              },
-              icon:"assets/icons/cashback.png" ,
-              title: "Keshbek",
-              trailing: const Text(
-                "0 so'm",
-                style: TextStyle(
-
-                fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            CabinetActionTile(
-              onPressed: () {
-              },
-              icon:"assets/icons/user.png",
-              title: "Shaxsiy ma'lumotlar",
-              trailing: AppBackButton(
-                isForward: true,
-                onPressed: () {},
-              ),
-            ),
-            CabinetActionTile(
-              onPressed: () {
-              },
-              icon: "assets/icons/card.png",
-              title: "Mening kartalarim",
-              trailing: AppBackButton(
-                isForward: true,
-                onPressed: () {},
-              ),
-            ),
+            // CabinetActionTile(
+            //   onPressed: () {
+            //   },
+            //   icon:"assets/icons/cashback.png" ,
+            //   title: "Keshbek",
+            //   trailing: const Text(
+            //     "0 so'm",
+            //     style: TextStyle(
+            //
+            //     fontWeight: FontWeight.w500,
+            //     ),
+            //   ),
+            // ),
+            // CabinetActionTile(
+            //   onPressed: () {
+            //   },
+            //   icon:"assets/icons/user.png",
+            //   title: "Shaxsiy ma'lumotlar",
+            //   trailing: AppBackButton(
+            //     isForward: true,
+            //     onPressed: () {},
+            //   ),
+            // ),
+            // CabinetActionTile(
+            //   onPressed: () {
+            //   },
+            //   icon: "assets/icons/card.png",
+            //   title: "Mening kartalarim",
+            //   trailing: AppBackButton(
+            //     isForward: true,
+            //     onPressed: () {},
+            //   ),
+            // ),
             CabinetActionTile(
               onPressed: () {
               },
@@ -83,19 +83,19 @@ class _UserCabinetState extends State<UserCabinet> {
                 onPressed: () {},
               ),
             ),
-            CabinetActionTile(
-              onPressed: () {
-              },
-              icon: "assets/icons/security.png",
-              title: "Xavfsizlik",
-              trailing: const Text(
-                "O'chiq",
-                style: TextStyle(
-
-                fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            // CabinetActionTile(
+            //   onPressed: () {
+            //   },
+            //   icon: "assets/icons/security.png",
+            //   title: "Xavfsizlik",
+            //   trailing: const Text(
+            //     "O'chiq",
+            //     style: TextStyle(
+            //
+            //     fontWeight: FontWeight.w500,
+            //     ),
+            //   ),
+            // ),
             CabinetActionTile(
               onPressed: () {},
               icon: "assets/icons/settings.png",
@@ -117,7 +117,7 @@ class _UserCabinetState extends State<UserCabinet> {
 
               },
               icon: "assets/icons/help.png",
-              title: "Yordam",
+              title: "Buyurtmalar",
             ),
             CabinetActionTile(
               onPressed: () {},

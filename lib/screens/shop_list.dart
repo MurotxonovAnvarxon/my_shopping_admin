@@ -226,32 +226,16 @@ class _ShopListState extends State<ShopListWidget> {
           }),
         )*/
         ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            FloatingActionButton(
-              backgroundColor: Colors.black54,
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => OrderScreen()));
-              },
-              child: Icon(
-                Icons.shopping_cart,
-                color: Colors.white,
-              ),
-            ),
-            FloatingActionButton(
-              backgroundColor: Colors.black54,
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => AddProduct()));
-              },
-              child: Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-            ),
-          ],
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black54,
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => AddProduct()));
+          },
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
         ) /*cart.isEmpty
           ? null
           : FloatingActionButton.extended(

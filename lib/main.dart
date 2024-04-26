@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_shopping_admin/screens/login.dart';
+import 'package:my_shopping_admin/screens/orders_screen.dart';
 import 'package:my_shopping_admin/screens/splash.dart';
 
 import 'firebase_options.dart';
@@ -34,6 +35,7 @@ class _MyAppState extends State<MyApp> {
         "/": (BuildContext context) => const SplashScreen(),
         "login": (BuildContext context) => const LoginScreen(),
         "home": (BuildContext context) =>  ShopListWidget(),
+        "sell": (BuildContext context) =>  OrdersScreen(),
       },
       // home: ShopListWidget(),
     );

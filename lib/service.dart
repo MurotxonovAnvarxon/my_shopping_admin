@@ -54,31 +54,38 @@ class ProductService {
     return productList;
   }
 
-  static Future<List<SellingProduct>> getAllSellProductsFromFirestore() async {
+  static Future<List<SellingProduct>> getAllSellingProductsFromFirestore() async {
     try {
-      final QuerySnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance.collection('sellProducts').get();
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('sellProducts').get();
 
-      final List<SellingProduct> sellProducts = snapshot.docs.map((doc) {
-        // Ma'lumotlarni "SellingProduct" obyektlariga o'zgartirish
-        final data = doc.data();
-        return SellingProduct(
+      List<SellingProduct> sellingProducts = [];
+
+      for (QueryDocumentSnapshot doc in snapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>;
+
+        List<Product> products = (data['list'] as List<dynamic>).map((productData) {
+          return Product.fromFirestore(productData);
+        }).toList();
+
+        SellingProduct sellingProduct = SellingProduct(
           phone: data['id'],
           date: data['date'],
-          products: List.from(data['list'])
-              .map((product) => Product.fromFirestore(product))
-              .toList(),
+          products: products,
         );
-      }).toList();
 
-      // Ma'lumotlarni qaytarish
-      print('All sell products: $sellProducts');
-      return sellProducts;
+        sellingProducts.add(sellingProduct);
+      }
+
+      print('All selling products: $sellingProducts');
+      return sellingProducts;
     } catch (e) {
-      print('Failed to get all sell products: $e');
-      return []; // Xato sodir bo'lganda bo's ro'yxat qaytarish
+      print('Failed to get all selling products: $e');
+      return []; // Empty list if there's an error
     }
   }
+
+
+
 
   static Future<Product?> getProductById(String id) async {
     try {

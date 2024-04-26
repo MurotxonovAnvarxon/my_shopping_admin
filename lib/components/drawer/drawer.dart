@@ -105,7 +105,9 @@ class _UserCabinetState extends State<UserCabinet> {
               title: "Biz haqimizda",
             ),
             CabinetActionTile(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, "sell");
+              },
               icon: "assets/icons/help.png",
               title: "Buyurtmalar",
             ),

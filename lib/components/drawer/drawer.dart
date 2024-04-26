@@ -15,16 +15,11 @@ class UserCabinet extends StatefulWidget {
 }
 
 class _UserCabinetState extends State<UserCabinet> {
-
-
-
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
       shape: const RoundedRectangleBorder(),
       elevation: 0,
-
       surfaceTintColor: Colors.white,
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
@@ -74,8 +69,7 @@ class _UserCabinetState extends State<UserCabinet> {
             //   ),
             // ),
             CabinetActionTile(
-              onPressed: () {
-              },
+              onPressed: () {},
               icon: "assets/icons/locations.png",
               title: "Manzillar",
               trailing: AppBackButton(
@@ -102,20 +96,16 @@ class _UserCabinetState extends State<UserCabinet> {
               title: "Sozlamalar",
               trailing: AppBackButton(
                 isForward: true,
-                onPressed: () {
-                },
+                onPressed: () {},
               ),
             ),
             CabinetActionTile(
-              onPressed: () {
-              },
+              onPressed: () {},
               icon: "assets/icons/about.png",
               title: "Biz haqimizda",
             ),
             CabinetActionTile(
-              onPressed: () {
-
-              },
+              onPressed: () {},
               icon: "assets/icons/help.png",
               title: "Buyurtmalar",
             ),
@@ -125,14 +115,11 @@ class _UserCabinetState extends State<UserCabinet> {
               title: "Ulashish",
             ),
             ExitTile(
-              onPressed: () {
-
-              },
+              onPressed: () {},
             ),
             const Spacer(),
             const Text('Versiya 1.1.0')
-          ]
-          ,
+          ],
         ),
       ),
     );

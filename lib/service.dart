@@ -31,31 +31,6 @@ class ProductService {
   static List<Product> productList = [];
   static List<SellingProduct> sellProductList = [];
 
-  static Future<List<SellingProduct>> getAllSellProductList() async {
-    try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('sellProductsUmg').get();
-      querySnapshot.docs.forEach((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        SellingProduct product = SellingProduct(
-          id: doc.id,
-          name: data['name'] ?? '',
-          description: data['description'] ?? '',
-          price: data['price'] ?? '',
-          isAvailable: data['isAvailable'] ?? false,
-          categoriesName: data['categoriesName'] ?? '',
-          // imageUrl: '',
-          date: '',
-        );
-        sellProductList.add(product);
-
-      });
-    } catch (e) {
-      print('Error getting products: $e');
-    }
-    return sellProductList;
-  }
-
   static Future<List<Product>> getAllProductList() async {
     try {
       QuerySnapshot querySnapshot =
@@ -77,6 +52,32 @@ class ProductService {
       print('Error getting products: $e');
     }
     return productList;
+  }
+
+  static Future<List<SellingProduct>> getAllSellProductsFromFirestore() async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> snapshot =
+          await FirebaseFirestore.instance.collection('sellProducts').get();
+
+      final List<SellingProduct> sellProducts = snapshot.docs.map((doc) {
+        // Ma'lumotlarni "SellingProduct" obyektlariga o'zgartirish
+        final data = doc.data();
+        return SellingProduct(
+          phone: data['id'],
+          date: data['date'],
+          products: List.from(data['list'])
+              .map((product) => Product.fromFirestore(product))
+              .toList(),
+        );
+      }).toList();
+
+      // Ma'lumotlarni qaytarish
+      print('All sell products: $sellProducts');
+      return sellProducts;
+    } catch (e) {
+      print('Failed to get all sell products: $e');
+      return []; // Xato sodir bo'lganda bo's ro'yxat qaytarish
+    }
   }
 
   static Future<Product?> getProductById(String id) async {
@@ -108,18 +109,5 @@ class ProductService {
     }
   }
 
-  static Future<void> getAllSellProductsFromFirestore() async {
-    try {
-      final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
-          .collection('sellProducts')
-          .get();
-
-      final List<Map<String, dynamic>> sellProducts = snapshot.docs.map((doc) => doc.data()).toList();
-
-      print('All sell products: $sellProducts');
-    } catch (e) {
-      print('Failed to get all sell products: $e');
-    }
-  }
 
 }

@@ -327,7 +327,7 @@ class _AddProductState extends State<AddProduct> {
                     //   controllerPrice.text,
                     //   selectedCategory,
                     // );
-                    Navigator.pop(context);
+                    Navigator.pushNamed(context,"home");
                   }
                   // uploadImageToFirebase(image!,
                   //     "images/${DateTime.now().millisecondsSinceEpoch}.jpg");

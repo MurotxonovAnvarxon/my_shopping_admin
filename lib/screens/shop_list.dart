@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:my_shopping_admin/components/drawer/drawer.dart';
 import 'package:my_shopping_admin/product_data/product_data.dart';
 import 'package:my_shopping_admin/screens/test.dart';
+import 'package:my_shopping_admin/service.dart';
 
 import '../items/shopping_cart.dart';
 import 'add_prodect_screen/add_product_screen.dart';
@@ -22,6 +23,29 @@ class _ShopListState extends State<ShopListWidget> {
 
   List<String> pictureUrls = [];
 
+  String selectedCategory = 'Barchasi';
+
+  List<Product> getFilteredItems(String category) {
+    if (category == 'Stullar') {
+      print('--------------------Stullar qaytdi');
+      return productList
+          .where((item) => item.categoriesName == category)
+          .toList();
+    }else if(category == 'Stollar'){
+      print('--------------------Stollar qaytdi');
+      return productList
+          .where((item) => item.categoriesName == category)
+          .toList();
+    }else if(category == 'Dekoratsiya'){
+      print('--------------------Dekoratsiya qaytdi');
+      return productList
+          .where((item) => item.categoriesName == category)
+          .toList();
+    } else {
+      return productList;
+    }
+  }
+
   final controller = DragSelectGridViewController();
   static List<Product> productList = [];
   List<Product> list=[];
@@ -29,10 +53,10 @@ class _ShopListState extends State<ShopListWidget> {
   @override
   void initState() {
     super.initState();
-
     setState(() {
       getAllProductList();
     });
+    getFilteredItems(selectedCategory);
     controller.addListener(scheduleRebuild);
     fetchImageUrlsFromStorage("images/");
   }
@@ -92,14 +116,40 @@ class _ShopListState extends State<ShopListWidget> {
 
   @override
   Widget build(BuildContext context) {
+
+    final List<String> categories = ['Stullar','Barchasi', 'Stollar','Dekoratsiya'];
+
     return Scaffold(
         drawer: const UserCabinet(),
         appBar: AppBar(
           key: const Key('selecting'),
           titleSpacing: 0,
           backgroundColor: Colors.lightBlueAccent,
-          centerTitle: true,
-
+          actions: [
+            DropdownButton<String>(
+              dropdownColor: Colors.grey,
+              underline: Container(
+                color: Colors.black,
+              ),
+              value: selectedCategory,
+              style: const TextStyle(color: Colors.white),
+              iconDisabledColor: Colors.white,
+              iconEnabledColor: Colors.white,
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    selectedCategory = newValue;
+                  });
+                }
+              },
+              items:
+              categories.map<DropdownMenuItem<String>>((String category) {
+                return DropdownMenuItem<String>(
+                  value: category,
+                  child: Text(category),
+                );
+              }).toList(),),
+          ],
           title: Text(
             "Dekoratsiyalar",
             style: TextStyle(color: Colors.white),
@@ -109,17 +159,17 @@ class _ShopListState extends State<ShopListWidget> {
           padding: const EdgeInsets.all(8.0),
           child: DragSelectGridView(
             padding: const EdgeInsets.all(8),
-            itemCount: pictureUrls.length,
+            itemCount: getFilteredItems(selectedCategory).length,
             itemBuilder: (context, index, selected) {
               return SelectableItem(
                 index: index,
                 color: Colors.grey,
                 selected: selected,
-                text: productList[index].name,
+                text: getFilteredItems(selectedCategory)[index].name,
                 pictureUrls: pictureUrls[index % pictureUrls.length],
-                price: '${productList[index].price} so`m',
-                description: productList[index].description,
-                categoriesName: productList[index].categoriesName,
+                price: '${getFilteredItems(selectedCategory)[index].price} so`m',
+                description: getFilteredItems(selectedCategory)[index].description,
+                categoriesName: getFilteredItems(selectedCategory)[index].categoriesName,
               );
             },
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(

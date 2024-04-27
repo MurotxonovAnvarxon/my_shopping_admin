@@ -122,7 +122,6 @@ class _AddProductState extends State<AddProduct> {
   Widget build(BuildContext context) {
     final List<String> categories = [
       'None',
-      'Barchasi',
       'Stullar',
       'Stollar',
       'Dekoratsiya'

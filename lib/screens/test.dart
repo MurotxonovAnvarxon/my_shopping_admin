@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:drag_select_grid_view/drag_select_grid_view.dart';
 
-void main() {
-  runApp(
-    MaterialApp(
-      home: MyApp(),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(elevation: 2),
-        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
-      ),
-    ),
-  );
-}
+// void main() {
+//   runApp(
+//     MaterialApp(
+//       home: MyApp(),
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//         primaryColor: Colors.white,
+//         scaffoldBackgroundColor: Colors.white,
+//         appBarTheme: const AppBarTheme(elevation: 2),
+//         colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
+//       ),
+//     ),
+//   );
+// }
 
 class MyApp extends StatefulWidget {
   @override

@@ -19,13 +19,11 @@ class _SellingDetailState extends State<SellingDetail> {
   var data;
   List<String> pictureUrls = [];
 
-
   @override
   void initState() {
-    data = ProductService.fetchSellProductsFromFirestore(widget.id);
     print("--------------data:${data.toString()}");
     fetchImageUrlsFromStorage("images/");
-
+    data = ProductService.fetchSellProductsFromFirestore(widget.id);
 
     super.initState();
   }
@@ -54,32 +52,44 @@ class _SellingDetailState extends State<SellingDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sana:${ProductService.date.substring(0, 10)}"),
+        title: Builder(builder: (context) {
+          if (ProductService.date?.substring(0, 10) != null) {
+            return Text("Sana:${ProductService?.date.substring(0, 10)}");
+          } else {
+            return CircularProgressIndicator();
+          }
+        }),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: DragSelectGridView(
-          // gridController: controller,
-          padding: const EdgeInsets.all(8),
-          itemCount: ProductService.prd.length,
-          itemBuilder: (context, index, selected) {
-            return SelectableItem(
-              index: index,
-              color: Colors.grey,
-              selected: selected,
-              text: ProductService.prd[index].name,
-              pictureUrls: pictureUrls[index % pictureUrls.length],
-              price: ProductService.prd[index].price,
-              description: ProductService.prd[index].description,
-              categoriesName: ProductService.prd[index].categoriesName,
+        child: Builder(builder: (context) {
+          if (ProductService.date.substring(0, 10) == null) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return DragSelectGridView(
+              // gridController: controller,
+              padding: const EdgeInsets.all(8),
+              itemCount: ProductService.prd.length,
+              itemBuilder: (context, index, selected) {
+                return SelectableItem(
+                  index: index,
+                  color: Colors.grey,
+                  selected: selected,
+                  text: ProductService.prd[index].name,
+                  pictureUrls: pictureUrls[index % pictureUrls.length],
+                  price: ProductService.prd[index].price,
+                  description: ProductService.prd[index].description,
+                  categoriesName: ProductService.prd[index].categoriesName,
+                );
+              },
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  mainAxisExtent: MediaQuery.of(context).size.width * 0.7),
             );
-          },
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              mainAxisExtent: MediaQuery.of(context).size.width * 0.7),
-        ),
+          }
+        }),
         /*GridView.count(
           crossAxisCount: 2,
           children: List.generate(pictureUrls.length, (index) {

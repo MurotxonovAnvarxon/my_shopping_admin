@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_shopping_admin/product_data/product_data.dart';
@@ -11,7 +12,7 @@ import 'package:my_shopping_admin/product_data/product_data.dart';
 import '../../service.dart';
 
 class AddProduct extends StatefulWidget {
-  const AddProduct({Key? key}) : super(key: key);
+  const AddProduct({super.key});
 
   @override
   State<AddProduct> createState() => _AddProductState();
@@ -25,7 +26,6 @@ class _AddProductState extends State<AddProduct> {
 
   String imageUrl = ''; // Set the actual image URL here
 
-  // Function to generate a unique ID (e.g., using Firestore auto-generated ID)
   String generateUniqueId() {
     return FirebaseFirestore.instance.collection('productsLast').doc().id;
   }
@@ -38,27 +38,6 @@ class _AddProductState extends State<AddProduct> {
       ),
     );
   }
-
-  // Future<void> uploadImageToFirebase(
-  //     File image, String firebaseStoragePath) async {
-  //   try {
-  //     // Firebase Storage ni olish
-  //     final storage = FirebaseStorage.instance;
-  //
-  //     // Rasmni yuklash uchun StorageReference obyektini olish
-  //     final ref = storage.ref().child(firebaseStoragePath);
-  //
-  //     // Rasmni yuklash
-  //     await ref.putFile(image);
-  //
-  //     // Yuklab olingan rasm URL sini olish
-  //     String downloadURL = await ref.getDownloadURL();
-  //     print("Rasm muvaffaqiyatli yuklandi. URL: $downloadURL");
-  //   } catch (e) {
-  //     print("Rasmni yuklashda xatolik yuz berdi: $e");
-  //   }
-  // }
-//
 
   Future uploadImage(String path) async {
     try {
@@ -113,7 +92,6 @@ class _AddProductState extends State<AddProduct> {
     String price,
     String categoriesName,
   ) async {
-    // Call the ProductService to add a new product to Firestore
     await ProductService.addProductToFirestore(
       id: id,
       name: name,
@@ -140,10 +118,15 @@ class _AddProductState extends State<AddProduct> {
     });
   }
 
-//koment
   @override
   Widget build(BuildContext context) {
-    final List<String> categories = ['None', 'Barchasi', 'Stullar', 'Stollar','Dekoratsiya'];
+    final List<String> categories = [
+      'None',
+      'Barchasi',
+      'Stullar',
+      'Stollar',
+      'Dekoratsiya'
+    ];
     String dropdownValue = categories.first;
     return Scaffold(
       appBar: AppBar(
@@ -245,6 +228,7 @@ class _AddProductState extends State<AddProduct> {
                 onChanged: (text) {
                   controllerPrice.text = text;
                 },
+                keyboardType: TextInputType.number,
                 controller: controllerPrice,
                 decoration: const InputDecoration(
                   labelText: "Dekoratsiya narxi",
@@ -298,39 +282,28 @@ class _AddProductState extends State<AddProduct> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: InkWell(
                 onTap: () async {
-                  // File? image = await pickImage();
                   if (selectedCategory == 'None') {
                     showSnackbar(context, 'Iltimos kategoriya tanlang!');
                   } else if (controllerName.text.length < 4) {
-                    showSnackbar(
-                        context, "Nom uzunligi 4 dan katta bo'lsin");
+                    showSnackbar(context, "Nom uzunligi 4 dan katta bo'lsin");
                   } else if (controllerDescription.text.length < 4) {
-                    showSnackbar(context,
-                        "Deskription uzunligi 4 dan katta bo'lsin");
+                    showSnackbar(
+                        context, "Deskription uzunligi 4 dan katta bo'lsin");
                   } else if (controllerPrice.text.isEmpty) {
                     showSnackbar(context, "Iltimos narxni kiriting");
                   } else {
                     var idAndPath = generateUniqueId();
                     uploadImage(idAndPath);
                     addProduct(
-                        idAndPath+'.png',
+                        idAndPath + '.png',
                         idAndPath,
                         controllerName.text,
                         controllerDescription.text,
                         controllerPrice.text,
                         selectedCategory);
-                    // uploadFirestore(
-                    //   idAndPath,
-                    //   idAndPath,
-                    //   controllerName.text,
-                    //   controllerDescription.text,
-                    //   controllerPrice.text,
-                    //   selectedCategory,
-                    // );
-                    Navigator.pushNamed(context,"home");
+
+                    Navigator.pushNamed(context, "home");
                   }
-                  // uploadImageToFirebase(image!,
-                  //     "images/${DateTime.now().millisecondsSinceEpoch}.jpg");
                 },
                 child: Container(
                   decoration: BoxDecoration(

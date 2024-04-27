@@ -28,7 +28,6 @@ class ProductService {
     }
   }
 
-  static List<Product> productList = [];
   static List<SellingProduct> sellingProducts = [];
   static List<SellingProduct> dataSelling = [];
   static List<Product> prd = [];
@@ -64,28 +63,6 @@ class ProductService {
     }
   }
 
-  static Future<List<Product>> getAllProductList() async {
-    try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('productsumg').get();
-      querySnapshot.docs.forEach((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        Product product = Product(
-          id: doc.id,
-          name: data['name'] ?? '',
-          description: data['description'] ?? '',
-          price: data['price'] ?? '',
-          imageUrl: data['imageUrl'] ?? '',
-          isAvailable: data['isAvailable'] ?? false,
-          categoriesName: data['categoriesName'] ?? '',
-        );
-        productList.add(product);
-      });
-    } catch (e) {
-      print('Error getting products: $e');
-    }
-    return productList;
-  }
 
   static CollectionReference sellProducts =
       FirebaseFirestore.instance.collection('sellProducts');
